@@ -42,8 +42,8 @@ You should see:
 ```
 origin    https://github.com/yourusername/mubaku.git (fetch)
 origin    https://github.com/yourusername/mubaku.git (push)
-upstream  https://github.com/original-owner/mubaku.git (fetch)
-upstream  https://github.com/original-owner/mubaku.git (push)
+upstream  https://github.com/ACHIRIHILARY/mubaku-lifestyle-backend.git (fetch)
+upstream  https://github.com/ACHIRIHILARY/mubaku-lifestyle-backend.git (push)
 ```
 
 ### 4. Create a Branch

@@ -1,10 +1,4 @@
-Perfect ✅ Let’s go full **Markdown** with both files:
 
----
-
-# 📘 `README.md`
-
-````markdown
 # Mubaku
 
 Mubaku is a Django-based platform for **barbers and beauty professionals**, designed to connect service providers with clients, manage bookings, and handle transactions.  
@@ -160,7 +154,7 @@ make test
 ├── README.md
 ├── requirements.txt
 ├── staticfiles
-
+```
 ---
 
 ## 🤝 Contributing
@@ -173,8 +167,4 @@ We welcome contributions! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) fil
 
 This project is licensed under the **MIT License**.
 
-````
 
----
-
-# 📘 `CONTRIBUTING.md`
