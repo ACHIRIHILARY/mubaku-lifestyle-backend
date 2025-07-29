@@ -1,5 +1,9 @@
 from pathlib import Path
 import environ
+import logging
+import logging.config
+from django.utils.log import DEFAULT_LOGGING
+from .constants import LoggingConstants
 
 env = environ.Env(DEBUG=(bool, False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -110,3 +114,55 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# =============== Logging ================
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
+            },
+            "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+            "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "console",
+            },
+            "file": {
+                "level": LoggingConstants.LOG_LEVEL,
+                "class": "logging.FileHandler",
+                "formatter": "file",
+                "filename": f"logs/{LoggingConstants.LOG_FILE_NAME}",
+            },
+            "django.server": DEFAULT_LOGGING["handlers"]["django.server"],
+        },
+        "loggers": {
+            "": {
+                "level": LoggingConstants.LOG_LEVEL,
+                "handlers": ["console", "file"],
+                "propagate": False,
+            },
+            "apps": {
+                "level": LoggingConstants.LOG_LEVEL,
+                "handlers": ["console", "file"],
+                "propagate": False,
+            },
+            "django.server": DEFAULT_LOGGING["loggers"]["django.server"],
+            "channels": {
+                "level": "DEBUG",  # Set to DEBUG for detailed Channels logging
+                "handlers": ["console", "file"],
+                "propagate": False,
+            },
+            "channels.layers": {
+                "level": "DEBUG",  # Specific logger for Channels layers
+                "handlers": ["console", "file"],
+                "propagate": False,
+            },
+        },
+    }
+)
