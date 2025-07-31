@@ -31,13 +31,13 @@ DJANGO_APPS = [
 ]
 
 LOCAL_APPS = [
-    "apps.users.UsersConfig",
+    "apps.users.apps.UsersConfig",
+    "apps.core.apps.CoreConfig",
 ]
 
 THIRD_PARTY_APPS = []
 
-INSTALLED_APPS = [DJANGO_APPS, LOCAL_APPS, THIRD_PARTY_APPS]
-
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -78,6 +78,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "users.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
