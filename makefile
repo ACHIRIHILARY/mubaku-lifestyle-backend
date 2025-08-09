@@ -59,6 +59,12 @@ volume:
 rental-db:
 	docker compose exec postgres-db psql --username=miclem --dbname=rentals
 
+generate-api-schema:
+	docker compose exec api python manage.py spectacular --file schema.yaml
+
+generate-api-schema-json:
+	docker compose exec api python manage.py spectacular --file schema.json
+
 test:
 	docker compose exec api pytest -p no:warnings --cov=.
 

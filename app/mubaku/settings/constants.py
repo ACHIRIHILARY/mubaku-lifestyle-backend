@@ -7,6 +7,8 @@ class LoggingConstants:
 class AppContants:
     USER_EMAIL_VALIDATION_ERROR_MESSAGE = "You must provide a valid email address"
     NO_USERNAME_ERROR_MESSAGE = "You must provide a vaalide username"
+    NO_FIRSTNAME_ERROR_MESSAGE = "User must provide a first name"
+    NO_LASTNAME_ERROR_MESSAGE = "User must provide a last name"
     NO_PASSWORD_ERROR_MESSAGE = "You must provide a valid password"
     NO_EMAIL_SET_ERROR_MESSAGE = "The email must be set"
     CREATE_SUPERUSER_IS_STAFF_IS_NOT_TRUE_ERROR_MESSAGE = (
