@@ -140,3 +140,38 @@ class Profile(TimeStampedUUIDModel):
             if self.user.last_login
             else "Never"
         )
+
+
+class ProviderProfile(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="provider_profile"
+    )
+    business_name = models.CharField(max_length=255, db_index=True)
+    business_address = models.TextField()
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True
+    )
+    description = models.TextField(blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+    subscription_tier = models.CharField(max_length=50, default="free", db_index=True)
+    subscription_expires_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["business_name"]),
+            models.Index(fields=["is_verified"]),
+            models.Index(fields=["subscription_tier"]),
+        ]
+
+
+class AdminProfile(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="admin_profile"
+    )
+    permissions = models.JSONField(default=dict)
+    department = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)

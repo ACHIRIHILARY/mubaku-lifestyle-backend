@@ -41,6 +41,7 @@ LOCAL_APPS = [
     "apps.payments.apps.PaymentsConfig",
     "apps.reviews.apps.ReviewsConfig",
     "apps.services.apps.ServicesConfig",
+    "apps.appointments.apps.AppointmentsConfig",
 ]
 
 THIRD_PARTY_APPS = [
