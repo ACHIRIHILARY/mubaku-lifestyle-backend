@@ -35,8 +35,6 @@ LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.core.apps.CoreConfig",
     "apps.analytics.apps.AnalyticsConfig",
-    "apps.availability.apps.AvailabilityConfig",
-    "apps.bookings.apps.BookingsConfig",
     "apps.notifications.apps.NotificationsConfig",
     "apps.payments.apps.PaymentsConfig",
     "apps.reviews.apps.ReviewsConfig",
