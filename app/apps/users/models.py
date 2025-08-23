@@ -113,11 +113,6 @@ class Profile(TimeStampedUUIDModel):
         default=False,
         help_text=_("Indicates if the provider profile is verified by an admin."),
     )
-    is_verified_landlord = models.BooleanField(
-        verbose_name=_("Is Verified Landlord"),
-        default=False,
-        help_text=_("Indicates if the landlord profile is verified by an admin."),
-    )
 
     address = models.CharField(
         max_length=100,
@@ -129,21 +124,6 @@ class Profile(TimeStampedUUIDModel):
 
     def __str__(self) -> str:
         return f"{self.user.username}'s Profile"
-
-    def get_profile_enquiries(self):
-        enquiries = self.enquiries.all()
-        return enquiries
-
-    def get_profile_listings(self):
-        # Convert each QuerySet to a list
-        landed_properties = list(self.lands.all())
-        properties = list(self.properties.all())
-        car_properties = list(self.cars.all())
-
-        # Combine all the lists
-        all_properties = landed_properties + properties + car_properties
-
-        return all_properties
 
     @property
     def joined_date(self):
