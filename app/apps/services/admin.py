@@ -4,7 +4,7 @@ from .models import ServiceCategory, Service
 
 @admin.register(ServiceCategory)
 class ServiceCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_active", "created", "updated")
+    list_display = ("name", "is_active", "created_at", "updated_at")
     list_filter = ("is_active",)
     search_fields = ("name",)
     ordering = ("name",)

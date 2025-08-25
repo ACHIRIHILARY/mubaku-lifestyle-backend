@@ -4,10 +4,10 @@ from .models import Review, Dispute
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ("provider", "client", "rating", "created", "updated")
+    list_display = ("provider", "client", "rating", "created_at", "updated_at")
     list_filter = ("rating",)
     search_fields = ("provider__user__username", "client__user__username")
-    readonly_fields = ("created", "updated")
+    readonly_fields = ("created_at", "updated_at")
 
 
 @admin.register(Dispute)

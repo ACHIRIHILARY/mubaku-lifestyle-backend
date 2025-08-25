@@ -4,10 +4,10 @@ from .models import Notification, LoyaltyProgram
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ("title", "user", "notification_type", "is_read", "created")
-    list_filter = ("notification_type", "is_read", "created")
+    list_display = ("title", "user", "notification_type", "is_read", "created_at")
+    list_filter = ("notification_type", "is_read", "created_at")
     search_fields = ("title", "user__email")
-    ordering = ("-created",)
+    ordering = ("-created_at",)
 
 
 @admin.register(LoyaltyProgram)
