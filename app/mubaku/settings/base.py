@@ -5,6 +5,7 @@ from datetime import timedelta
 import logging.config
 from django.utils.log import DEFAULT_LOGGING
 from .constants import LoggingConstants
+from django.utils.translation import gettext_lazy as _
 
 env = environ.Env(DEBUG=(bool, False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,6 +78,8 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "apps.core.middleware.language_middleware.AcceptLanguageMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -84,6 +87,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+]
+
 
 ROOT_URLCONF = "mubaku.urls"
 
