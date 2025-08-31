@@ -9,7 +9,6 @@ from .models import (
 
 @register(ProviderAvailability)
 class ProviderAvailabilityTranslationOptions(TranslationOptions):
-    # No text fields to translate (only FK, int, bool, time fields)
     fields = ()
 
 
@@ -20,8 +19,6 @@ class ProviderAvailabilityExceptionTranslationOptions(TranslationOptions):
 
 @register(AppointmentSlot)
 class AppointmentSlotTranslationOptions(TranslationOptions):
-    # Slot status uses choices, so you could translate via gettext in verbose_name,
-    # no extra DB field translation needed.
     fields = ()
 
 
