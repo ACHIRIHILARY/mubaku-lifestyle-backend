@@ -33,14 +33,14 @@ class Review(TimeStampedUUIDModel):
 
 class Dispute(TimeStampedUUIDModel):
     DISPUTE_STATUS = (
-        ("open", "Open"),
-        ("in_review", "In Review"),
-        ("resolved", "Resolved"),
+        ("open", _("Open")),
+        ("in_review", _("In Review")),
+        ("resolved", _("Resolved")),
     )
 
     DISPUTE_RESOLUTION = (
-        ("payment_released", "Payment Released to Provider"),
-        ("payment_refunded", "Payment Refunded to Client"),
+        ("payment_released", _("Payment Released to Provider")),
+        ("payment_refunded", _("Payment Refunded to Client")),
     )
 
     appointment = models.OneToOneField(
