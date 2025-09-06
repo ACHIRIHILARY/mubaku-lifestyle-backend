@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o errexit
+
+set -o nounset
+
+watchmedo auto-restart -d mubaku/ -p '*.py' -- celery -A mubaku worker -l info
