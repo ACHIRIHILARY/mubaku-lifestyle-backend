@@ -16,12 +16,11 @@ from .managers import CustomUserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
-        ("client", "Client"),
-        ("provider", "Provider"),
-        ("admin", "Admin"),
-        ("superuser", "Superuser"),
+        ("client", _("Client")),
+        ("provider", _("Provider")),
+        ("admin", _("Admin")),
+        ("superuser", _("Superuser")),
     )
-
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     pkid = models.BigAutoField(primary_key=True, editable=False)
     username = models.CharField(verbose_name=_("Username"), max_length=250)
@@ -138,7 +137,11 @@ class Profile(TimeStampedUUIDModel):
     description = models.TextField(blank=True, null=True)
     subscription_tier = models.CharField(
         max_length=20,
-        choices=(("basic", "Basic"), ("premium", "Premium"), ("business", "Business")),
+        choices=(
+            ("basic", _("Basic")),
+            ("premium", _("Premium")),
+            ("business", _("Business")),
+        ),
         default="basic",
     )
     subscription_expires_at = models.DateTimeField(blank=True, null=True)
