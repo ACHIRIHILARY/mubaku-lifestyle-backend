@@ -6,18 +6,10 @@ from .models import Profile, User
 class ProfileTranslationOptions(TranslationOptions):
     fields = (
         "about_me",
-        "address",
-        "business_name",
-        "business_address",
         "description",
-        "city",
     )
 
 
 @register(User)
 class UserTranslationOptions(TranslationOptions):
-    fields = (
-        "first_name",
-        "last_name",
-        "username",
-    )
+    fields = ()
