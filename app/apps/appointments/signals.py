@@ -7,6 +7,6 @@ from .models import ProviderAvailabilityException
 
 @receiver(post_save, sender=ProviderAvailabilityException)
 def auto_translate_product(sender, instance, created, **kwargs):
-    if created:
-        # Use transaction on_commit to ensure we have an ID
-        transaction.on_commit(lambda: auto_translate_instance(instance, ["reason"]))
+
+    # Use transaction on_commit to ensure we have an ID
+    transaction.on_commit(lambda: auto_translate_instance(instance, ["reason"]))

@@ -7,8 +7,8 @@ from .models import Notification
 
 @receiver(post_save, sender=Notification)
 def auto_translate_notification(sender, instance, created, **kwargs):
-    if created:
-        # Use transaction.on_commit to ensure we have a saved instance with an ID
-        transaction.on_commit(
-            lambda: auto_translate_instance(instance, ["title", "message"])
-        )
+
+    # Use transaction.on_commit to ensure we have a saved instance with an ID
+    transaction.on_commit(
+        lambda: auto_translate_instance(instance, ["title", "message"])
+    )

@@ -7,8 +7,8 @@ from .models import Payment
 
 @receiver(post_save, sender=Payment)
 def auto_translate_payment(sender, instance, created, **kwargs):
-    if created:
-        # Translate escrow_release_trigger if provided
-        transaction.on_commit(
-            lambda: auto_translate_instance(instance, ["escrow_release_trigger"])
-        )
+
+    # Translate escrow_release_trigger if provided
+    transaction.on_commit(
+        lambda: auto_translate_instance(instance, ["escrow_release_trigger"])
+    )

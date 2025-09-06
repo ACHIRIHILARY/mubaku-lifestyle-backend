@@ -24,9 +24,9 @@ def save_user_model(sender, instance, **kw):
 
 @receiver(post_save, sender=Profile)
 def auto_translate_profile(sender, instance, created, **kwargs):
-    if created:
-        fields = [
-            "about_me",
-            "description",
-        ]
-        transaction.on_commit(lambda: auto_translate_instance(instance, fields))
+
+    fields = [
+        "about_me",
+        "description",
+    ]
+    transaction.on_commit(lambda: auto_translate_instance(instance, fields))
