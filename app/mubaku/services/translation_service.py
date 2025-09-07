@@ -10,9 +10,10 @@ def auto_translate_instance(instance, field_names):
     Automatically translate an instance's fields to all supported languages
     """
     for lang_code, _ in settings.LANGUAGES:
+        print("translating bro")
 
         for field_name in field_names:
-
+            print("Translating: field_name", field_name)
             # get the value of the field
             value = getattr(instance, field_name)
 

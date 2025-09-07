@@ -44,8 +44,10 @@ LOCAL_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "modeltranslation",
     "autoslug",
     "django_extensions",
+    "drf_yasg",
     "django_elasticsearch_dsl",
     "allauth",
     "allauth.socialaccount",

@@ -148,6 +148,9 @@ class Profile(TimeStampedUUIDModel):
 
     # Client-specific fields
     loyalty_points = models.IntegerField(default=0)
+    phone_number = PhoneNumberField(
+        verbose_name=_("Phone Number"), max_length=30, default="+237670181440"
+    )
 
     class Meta:
         indexes = [
