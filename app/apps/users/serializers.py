@@ -18,6 +18,14 @@ class UserSerializer(serializers.ModelSerializer):
     city = serializers.CharField(source="profile.city", read_only=True)
     full_name = serializers.SerializerMethodField(read_only=True)
 
+    # Provider application fields
+    provider_application_status = serializers.CharField(
+        source="profile.provider_application_status", read_only=True
+    )
+    is_verified_provider = serializers.BooleanField(
+        source="profile.is_verified_provider", read_only=True
+    )
+
     class Meta:
         model = User
         fields = [
@@ -35,6 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "date_joined",
+            "provider_application_status",
+            "is_verified_provider",
         ]
         read_only_fields = ["pkid", "email", "date_joined"]
 
@@ -87,6 +97,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "last_login",
             "membership_duration",
             "role",
+            # Provider fields
             "is_verified_provider",
             "business_name",
             "business_address",
@@ -95,6 +106,18 @@ class ProfileSerializer(serializers.ModelSerializer):
             "description",
             "subscription_tier",
             "subscription_expires_at",
+            # Provider application fields
+            "provider_application_status",
+            "provider_application_date",
+            "withdrawn_date",
+            "provider_application_data",
+            "years_of_experience",
+            "certifications",
+            "portfolio_urls",
+            "service_categories",
+            "availability_schedule",
+            "emergency_contact",
+            # Client fields
             "loyalty_points",
         ]
 
@@ -118,8 +141,10 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
+            # User fields
             "first_name",
             "last_name",
+            # Basic profile fields
             "phone_number",
             "profile_photo",
             "about_me",
@@ -127,11 +152,19 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
             "country",
             "city",
             "address",
+            # Provider business fields
             "business_name",
             "business_address",
             "latitude",
             "longitude",
             "description",
+            # Additional provider details
+            "years_of_experience",
+            "certifications",
+            "portfolio_urls",
+            "service_categories",
+            "availability_schedule",
+            "emergency_contact",
         ]
 
     def update(self, instance, validated_data):
@@ -145,6 +178,28 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
 
         # Update profile data
         return super().update(instance, validated_data)
+
+
+class ProviderApplicationSerializer(serializers.ModelSerializer):
+    """
+    Serializer specifically for provider applications
+    """
+
+    class Meta:
+        model = Profile
+        fields = [
+            "business_name",
+            "business_address",
+            "description",
+            "latitude",
+            "longitude",
+            "years_of_experience",
+            "certifications",
+            "portfolio_urls",
+            "service_categories",
+            "availability_schedule",
+            "emergency_contact",
+        ]
 
 
 class UnifiedProfileSerializer(serializers.ModelSerializer):
@@ -182,6 +237,35 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
         source="profile.subscription_expires_at", read_only=True
     )
 
+    # Provider application fields
+    provider_application_status = serializers.CharField(
+        source="profile.provider_application_status", read_only=True
+    )
+    provider_application_date = serializers.DateTimeField(
+        source="profile.provider_application_date", read_only=True
+    )
+    provider_application_data = serializers.JSONField(
+        source="profile.provider_application_data", read_only=True
+    )
+    years_of_experience = serializers.IntegerField(
+        source="profile.years_of_experience", read_only=True
+    )
+    certifications = serializers.JSONField(
+        source="profile.certifications", read_only=True
+    )
+    portfolio_urls = serializers.JSONField(
+        source="profile.portfolio_urls", read_only=True
+    )
+    service_categories = serializers.JSONField(
+        source="profile.service_categories", read_only=True
+    )
+    availability_schedule = serializers.CharField(
+        source="profile.availability_schedule", read_only=True
+    )
+    emergency_contact = serializers.CharField(
+        source="profile.emergency_contact", read_only=True
+    )
+
     # Client fields
     loyalty_points = serializers.IntegerField(
         source="profile.loyalty_points", read_only=True
@@ -190,9 +274,7 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
 
     # Computed fields
     full_name = serializers.SerializerMethodField(read_only=True)
-    membership_duration = serializers.CharField(
-        source="membership_duration", read_only=True
-    )
+    membership_duration = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
@@ -206,6 +288,7 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "date_joined",
+            # Basic profile fields
             "phone_number",
             "about_me",
             "profile_photo",
@@ -213,6 +296,7 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
             "country",
             "city",
             "address",
+            # Provider business fields
             "business_name",
             "business_address",
             "latitude",
@@ -221,6 +305,17 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
             "description",
             "subscription_tier",
             "subscription_expires_at",
+            # Provider application fields
+            "provider_application_status",
+            "provider_application_date",
+            "provider_application_data",
+            "years_of_experience",
+            "certifications",
+            "portfolio_urls",
+            "service_categories",
+            "availability_schedule",
+            "emergency_contact",
+            # Client fields
             "loyalty_points",
             "membership_duration",
         ]
@@ -228,3 +323,27 @@ class UnifiedProfileSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return obj.get_fullname
+
+    def get_membership_duration(self, obj):
+        return obj.membership_duration
+
+
+class ProviderApplicationStatusSerializer(serializers.ModelSerializer):
+    """
+    Serializer for provider application status
+    """
+
+    username = serializers.CharField(source="user.username", read_only=True)
+    email = serializers.EmailField(source="user.email", read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = [
+            "provider_application_status",
+            "provider_application_date",
+            "withdrawn_date",
+            "is_verified_provider",
+            "business_name",
+            "username",
+            "email",
+        ]

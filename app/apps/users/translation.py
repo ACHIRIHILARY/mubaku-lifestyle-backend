@@ -7,6 +7,9 @@ class ProfileTranslationOptions(TranslationOptions):
     fields = (
         "about_me",
         "description",
+        "business_name",  # Added
+        "business_address",  # Added
+        "availability_schedule",  # Added
     )
 
 
