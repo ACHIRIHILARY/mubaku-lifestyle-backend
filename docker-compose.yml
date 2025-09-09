@@ -1,5 +1,5 @@
 services:
-    web: 
+    api: 
         build:
             context: .
             dockerfile: ./docker/local/django/Dockerfile
@@ -76,7 +76,7 @@ services:
     nginx:
         restart: always
         depends_on:
-            - web
+            - api
         build: 
             context: ./docker/local/nginx
             dockerfile: Dockerfile
