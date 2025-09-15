@@ -1,5 +1,7 @@
 from .base import *
 
+DEBUG = True
+
 DATABASES = {
     "default": {
         "ENGINE": env("POSTGRES_ENGINE"),
@@ -29,3 +31,4 @@ SITE_NAME = "Blizton"
 CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = env("CELERY_BACKEND")
 CELERY_TIME_ZONE = "Africa/Douala"
+

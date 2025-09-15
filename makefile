@@ -25,6 +25,9 @@ migrate:
 makemigrations:
 	docker compose exec api python manage.py makemigrations
 
+show-urls:
+	docker compose exec api python manage.py show_urls
+
 check:
 	docker compose exec api python manage.py check
 
