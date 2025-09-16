@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     "djoser",
     "formtools",
     "djcelery_email",
+    "drf_spectacular",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -249,6 +250,16 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "NON_FIELD_ERRORS_KEY": "error",
     "EXCEPTION_HANDLER": "rest_framework.views.exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+
+# API Documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Mubaku Lifestyle API",
+    "DESCRIPTION": "API documentation for authentication, users, and profiles.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 DJANGO_FILTERS_CONFIG = {
