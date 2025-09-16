@@ -28,7 +28,7 @@ class Notification(TimeStampedUUIDModel):
         indexes = [
             models.Index(fields=["user"]),
             models.Index(fields=["is_read"]),
-            models.Index(fields=["created"]),
+            models.Index(fields=["created_at"]),
         ]
 
     def __str__(self):
