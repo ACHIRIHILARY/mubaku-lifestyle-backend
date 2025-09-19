@@ -7,7 +7,9 @@ from apps.core.models import TimeStampedUUIDModel
 class ServiceCategory(TimeStampedUUIDModel):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.ImageField(
+        verbose_name=_("Image"), default="categories/service_category.png"
+    )
     is_active = models.BooleanField(default=True)
 
     class Meta:
