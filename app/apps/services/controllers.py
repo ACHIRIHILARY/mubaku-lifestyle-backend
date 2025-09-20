@@ -369,7 +369,7 @@ def get_my_service_stats(request):
 @permission_classes([AllowAny])
 def get_provider_services(request, provider_id):
     """Get all services for a specific provider"""
-    services = Service.objects.filter(provider_id=provider_id, is_active=True)
+    services = Service.objects.filter(provider__id=provider_id, is_active=True)
 
     if not services.exists():
         return Response(

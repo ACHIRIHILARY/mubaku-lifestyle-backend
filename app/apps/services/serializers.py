@@ -12,6 +12,7 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
         model = ServiceCategory
         fields = [
             "id",
+            "pkid",
             "name",
             "description",
             "image_url",
@@ -29,7 +30,7 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
 class ServiceCategoryCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceCategory
-        fields = ["name", "description", "image_url", "is_active"]
+        fields = ["id", "pkid", "name", "description", "image_url", "is_active"]
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -54,6 +55,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         model = Service
         fields = [
             "id",
+            "pkid",
             "name",
             "description",
             "category",
@@ -92,6 +94,8 @@ class ServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = [
+            "id",
+            "pkid",
             "name",
             "description",
             "category",
