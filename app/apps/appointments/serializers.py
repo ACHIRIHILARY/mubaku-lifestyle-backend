@@ -1,11 +1,6 @@
 # apps/appointments/serializers.py
 from rest_framework import serializers
-from .models import (
-    ProviderAvailability,
-    ProviderAvailabilityException,
-    AppointmentSlot,
-    Appointment,
-)
+from .models import ProviderAvailability, ProviderAvailabilityException, Appointment
 from apps.services.models import Service
 from apps.users.models import Profile
 
@@ -44,13 +39,6 @@ class ProviderAvailabilityExceptionSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "provider"]
 
 
-class AppointmentSlotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AppointmentSlot
-        fields = ["id", "provider", "slot_start", "slot_end", "status", "appointment"]
-        read_only_fields = ["id"]
-
-
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     service_id = serializers.UUIDField(write_only=True)
 
@@ -79,9 +67,9 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("End time must be after start time")
 
         # Validate the slot is available
-        from .controllers import SlotService
+        from .controllers import SlotController
 
-        if not SlotService._is_slot_available(
+        if not SlotController.is_slot_available(
             data["provider"], data["scheduled_for"], data["scheduled_until"]
         ):
             raise serializers.ValidationError("This time slot is no longer available")
