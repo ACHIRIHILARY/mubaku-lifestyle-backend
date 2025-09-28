@@ -26,6 +26,7 @@ urlpatterns = [
     ),
     path("api/v1/users/", include("apps.users.urls", namespace="users_api")),
     path("api/v1/services/", include("apps.services.urls")),  # services
+    path("api/v1/appointments/", include("apps.appointments.urls")),  # appointments
 ]
 
 

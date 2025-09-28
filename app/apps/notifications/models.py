@@ -32,7 +32,7 @@ class Notification(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"{self.title} - {self.user.get_fullname()}"
+        return f"{self.title} - {self.user.get_fullname}"
 
 
 class LoyaltyProgram(TimeStampedUUIDModel):
@@ -58,4 +58,6 @@ class LoyaltyProgram(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"Loyalty program: {self.client.user.get_fullname()} - {self.provider.user.get_fullname()}"
+        return (
+            f"Loyalty program: {self.client.user} - {self.provider.user.get_fullname}"
+        )

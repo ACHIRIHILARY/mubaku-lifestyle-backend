@@ -6,9 +6,7 @@ from apps.users.models import Profile
 
 
 class ProviderAvailabilitySerializer(serializers.ModelSerializer):
-    day_of_week_display = serializers.CharField(
-        source="get_day_of_week_display", read_only=True
-    )
+    day_of_week_display = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ProviderAvailability
@@ -22,6 +20,9 @@ class ProviderAvailabilitySerializer(serializers.ModelSerializer):
             "is_available",
         ]
         read_only_fields = ["id", "provider"]
+
+    def get_day_of_week_display(self, obj):
+        return obj.get_day_of_week_display()
 
 
 class ProviderAvailabilityExceptionSerializer(serializers.ModelSerializer):

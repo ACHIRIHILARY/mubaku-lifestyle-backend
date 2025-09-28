@@ -503,7 +503,7 @@ class CalendarController:
                 {
                     "start": appointment.scheduled_for,
                     "end": appointment.scheduled_until,
-                    "client_name": appointment.client.user.get_fullname(),
+                    "client_name": appointment.client.user.get_fullname,
                     "service_name": appointment.service.name,
                     "status": appointment.status,
                 }
