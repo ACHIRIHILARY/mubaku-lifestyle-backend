@@ -16,12 +16,11 @@ from .managers import CustomUserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
-        ("client", "Client"),
-        ("provider", "Provider"),
-        ("admin", "Admin"),
-        ("superuser", "Superuser"),
+        ("client", _("Client")),
+        ("provider", _("Provider")),
+        ("admin", _("Admin")),
+        ("superuser", _("Superuser")),
     )
-
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     pkid = models.BigAutoField(primary_key=True, editable=False)
     username = models.CharField(verbose_name=_("Username"), max_length=250)
@@ -89,10 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Profile(TimeStampedUUIDModel):
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
     about_me = models.TextField(
-        verbose_name=_("About me"),
-        default="",
-        blank=True,
-        null=True,
+        verbose_name=_("About me"), default="", blank=True, null=True
     )
     profile_photo = models.ImageField(
         verbose_name=_("Profile Photo"), default="profiles/default_profile.png"
@@ -138,18 +134,50 @@ class Profile(TimeStampedUUIDModel):
     description = models.TextField(blank=True, null=True)
     subscription_tier = models.CharField(
         max_length=20,
-        choices=(("basic", "Basic"), ("premium", "Premium"), ("business", "Business")),
+        choices=(
+            ("basic", _("Basic")),
+            ("premium", _("Premium")),
+            ("business", _("Business")),
+        ),
         default="basic",
     )
     subscription_expires_at = models.DateTimeField(blank=True, null=True)
 
+    # Provider Application Tracking (ADD THESE)
+    provider_application_status = models.CharField(
+        max_length=20,
+        choices=(
+            ("pending", _("Pending")),
+            ("approved", _("Approved")),
+            ("rejected", _("Rejected")),
+            ("withdrawn", _("Withdrawn")),
+        ),
+        blank=True,
+        null=True,
+    )
+    provider_application_date = models.DateTimeField(blank=True, null=True)
+    withdrawn_date = models.DateTimeField(blank=True, null=True)
+    provider_application_data = models.JSONField(blank=True, null=True)
+
+    # Additional Provider Details (OPTIONAL)
+    years_of_experience = models.IntegerField(default=0, blank=True, null=True)
+    certifications = models.JSONField(blank=True, null=True)
+    portfolio_urls = models.JSONField(blank=True, null=True)
+    service_categories = models.JSONField(blank=True, null=True)
+    availability_schedule = models.TextField(blank=True, null=True)
+    emergency_contact = models.CharField(max_length=100, blank=True, null=True)
+
     # Client-specific fields
     loyalty_points = models.IntegerField(default=0)
+    phone_number = PhoneNumberField(
+        verbose_name=_("Phone Number"), max_length=30, default="+237670181440"
+    )
 
     class Meta:
         indexes = [
             models.Index(fields=["latitude", "longitude"]),
             models.Index(fields=["is_verified_provider"]),
+            models.Index(fields=["provider_application_status"]),  # ADD THIS INDEX
         ]
 
     def __str__(self) -> str:
@@ -157,12 +185,10 @@ class Profile(TimeStampedUUIDModel):
 
     @property
     def joined_date(self):
-        """Formatted account creation date"""
         return self.user.date_joined.strftime("%b %d, %Y")
 
     @property
     def last_login(self):
-        """Formatted last login time"""
         return (
             self.user.last_login.strftime("%b %d, %Y %I:%M %p")
             if self.user.last_login

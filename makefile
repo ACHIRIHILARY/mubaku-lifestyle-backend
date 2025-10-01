@@ -57,7 +57,7 @@ volume:
 
 
 rental-db:
-	docker compose exec postgres-db psql --username=miclem --dbname=rentals
+	docker compose exec postgres-db psql --username=mubakusystemsadmin --dbname=rentals
 
 generate-api-schema:
 	docker compose exec api python manage.py spectacular --file schema.yaml

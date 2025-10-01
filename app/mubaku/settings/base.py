@@ -5,6 +5,7 @@ from datetime import timedelta
 import logging.config
 from django.utils.log import DEFAULT_LOGGING
 from .constants import LoggingConstants
+from django.utils.translation import gettext_lazy as _
 
 env = environ.Env(DEBUG=(bool, False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,8 +44,10 @@ LOCAL_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "modeltranslation",
     "autoslug",
     "django_extensions",
+    "drf_yasg",
     "django_elasticsearch_dsl",
     "allauth",
     "allauth.socialaccount",
@@ -77,6 +80,8 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "apps.core.middleware.language_middleware.AcceptLanguageMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -84,6 +89,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+]
+
 
 ROOT_URLCONF = "mubaku.urls"
 
@@ -233,6 +244,10 @@ USE_TZ = True
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+MEDIA_URL = "/mediafiles/"
+MEDIA_ROOT = BASE_DIR / "mediafiles"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

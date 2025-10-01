@@ -30,9 +30,9 @@ class ProviderAvailability(TimeStampedUUIDModel):
 
 class ProviderAvailabilityException(TimeStampedUUIDModel):
     EXCEPTION_TYPES = (
-        ("unavailable", "Unavailable"),
-        ("available", "Available"),
-        ("modified_hours", "Modified Hours"),
+        ("unavailable", _("Unavailable")),
+        ("available", _("Available")),
+        ("modified_hours", _("Modified Hours")),
     )
 
     provider = models.ForeignKey(
@@ -55,14 +55,14 @@ class ProviderAvailabilityException(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"{self.provider.user.get_fullname()} - {self.exception_date} ({self.exception_type})"
+        return f"{self.provider.user.get_fullname()} - {self.exception_date} ({self.get_exception_type_display()})"
 
 
 class AppointmentSlot(TimeStampedUUIDModel):
     SLOT_STATUS = (
-        ("available", "Available"),
-        ("booked", "Booked"),
-        ("blocked", "Blocked"),
+        ("available", _("Available")),
+        ("booked", _("Booked")),
+        ("blocked", _("Blocked")),
     )
 
     provider = models.ForeignKey(
@@ -91,21 +91,21 @@ class AppointmentSlot(TimeStampedUUIDModel):
 
 class Appointment(TimeStampedUUIDModel):
     APPOINTMENT_STATUS = (
-        ("pending", "Pending"),
-        ("confirmed", "Confirmed"),
-        ("declined", "Declined"),
-        ("client_cancelled", "Cancelled by Client"),
-        ("provider_cancelled", "Cancelled by Provider"),
-        ("completed", "Completed"),
+        ("pending", _("Pending")),
+        ("confirmed", _("Confirmed")),
+        ("declined", _("Declined")),
+        ("client_cancelled", _("Cancelled by Client")),
+        ("provider_cancelled", _("Cancelled by Provider")),
+        ("completed", _("Completed")),
     )
 
     PAYMENT_STATUS = (
-        ("pending", "Pending"),
-        ("processing", "Processing"),
-        ("held_in_escrow", "Held in Escrow"),
-        ("released_to_provider", "Released to Provider"),
-        ("refunded_to_client", "Refunded to Client"),
-        ("failed", "Failed"),
+        ("pending", _("Pending")),
+        ("processing", _("Processing")),
+        ("held_in_escrow", _("Held in Escrow")),
+        ("released_to_provider", _("Released to Provider")),
+        ("refunded_to_client", _("Refunded to Client")),
+        ("failed", _("Failed")),
     )
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

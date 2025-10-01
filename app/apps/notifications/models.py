@@ -5,11 +5,11 @@ from apps.core.models import TimeStampedUUIDModel
 
 class Notification(TimeStampedUUIDModel):
     NOTIFICATION_TYPES = (
-        ("appointment_reminder", "Appointment Reminder"),
-        ("payment_confirmation", "Payment Confirmation"),
-        ("booking_confirmation", "Booking Confirmation"),
-        ("review_request", "Review Request"),
-        ("promotional", "Promotional"),
+        ("appointment_reminder", _("Appointment Reminder")),
+        ("payment_confirmation", _("Payment Confirmation")),
+        ("booking_confirmation", _("Booking Confirmation")),
+        ("review_request", _("Review Request")),
+        ("promotional", _("Promotional")),
     )
 
     user = models.ForeignKey(

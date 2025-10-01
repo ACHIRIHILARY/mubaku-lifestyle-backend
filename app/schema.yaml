@@ -513,6 +513,146 @@ paths:
               schema:
                 $ref: '#/components/schemas/SetPasswordRetype'
           description: ''
+  /api/v1/users/{username}/:
+    get:
+      operationId: v1_users_retrieve
+      description: Get a specific user's profile by username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/{username}/update/:
+    put:
+      operationId: v1_users_update_update
+      description: Update a user's profile - only allowed for the profile owner
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_users_update_partial_update
+      description: Update a user's profile - only allowed for the profile owner
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/{username}/verify-provider/:
+    post:
+      operationId: v1_users_verify_provider_create
+      description: Verify a provider profile (admin only)
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/me/:
+    get:
+      operationId: v1_users_me_retrieve
+      description: Get the current authenticated user's profile
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/me/data/:
+    get:
+      operationId: v1_users_me_data_retrieve
+      description: Get current user data (without profile details)
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/me/unified/:
+    get:
+      operationId: v1_users_me_unified_retrieve
+      description: |-
+        Unified profile view for GET and UPDATE operations
+        GET: Return current user's unified profile data
+        PUT/PATCH: Update user and profile information
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: v1_users_me_unified_update
+      description: |-
+        Unified profile view for GET and UPDATE operations
+        GET: Return current user's unified profile data
+        PUT/PATCH: Update user and profile information
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_users_me_unified_partial_update
+      description: |-
+        Unified profile view for GET and UPDATE operations
+        GET: Return current user's unified profile data
+        PUT/PATCH: Update user and profile information
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/update-role/:
+    post:
+      operationId: v1_users_update_role_create
+      description: Update the role of the authenticated user
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
 components:
   schemas:
     Activation:
@@ -1085,8 +1225,8 @@ components:
         email:
           type: string
           format: email
+          readOnly: true
           title: Email Address
-          maxLength: 254
         first_name:
           type: string
           maxLength: 250
@@ -1098,17 +1238,29 @@ components:
           readOnly: true
         gender:
           type: string
+          readOnly: true
         phone_number:
           type: string
+          readOnly: true
         profile_photo:
           type: string
           format: uri
+          readOnly: true
         country:
-          $ref: '#/components/schemas/CountryEnum'
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
         city:
           type: string
+          readOnly: true
         role:
           $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+        date_joined:
+          type: string
+          format: date
+          readOnly: true
     RoleEnum:
       enum:
       - client
@@ -1207,8 +1359,8 @@ components:
         email:
           type: string
           format: email
+          readOnly: true
           title: Email Address
-          maxLength: 254
         first_name:
           type: string
           maxLength: 250
@@ -1220,20 +1372,33 @@ components:
           readOnly: true
         gender:
           type: string
+          readOnly: true
         phone_number:
           type: string
+          readOnly: true
         profile_photo:
           type: string
           format: uri
+          readOnly: true
         country:
-          $ref: '#/components/schemas/CountryEnum'
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
         city:
           type: string
+          readOnly: true
         role:
           $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+        date_joined:
+          type: string
+          format: date
+          readOnly: true
       required:
       - city
       - country
+      - date_joined
       - email
       - first_name
       - full_name
