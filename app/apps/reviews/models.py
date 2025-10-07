@@ -28,7 +28,7 @@ class Review(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"Review for {self.provider.user.get_fullname()} by {self.client.user.get_fullname()}"
+        return f"Review for {self.provider.user.get_fullname} by {self.client.user.get_fullname}"
 
 
 class Dispute(TimeStampedUUIDModel):

@@ -6,8 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+
 
 from .exceptions import NotYourProfileException, ProfileNotFoundException
 from apps.users.models import Profile, User
@@ -52,11 +51,8 @@ def get_application_status_message(status, is_verified):
 
 
 # Profile Views
-@swagger_auto_schema(
-    method="GET",
-    operation_description="Get current user's profile",
-    responses={200: ProfileSerializer, 404: "Profile not found"},
-)
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_current_user_profile(request):
@@ -69,11 +65,6 @@ def get_current_user_profile(request):
         raise ProfileNotFoundException("Profile does not exist for this user")
 
 
-@swagger_auto_schema(
-    method="GET",
-    operation_description="Get user profile by user ID",
-    responses={200: ProfileSerializer, 403: "Forbidden", 404: "Not found"},
-)
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_profile_by_id(request, id):
@@ -95,28 +86,6 @@ def get_profile_by_id(request, id):
         raise ProfileNotFoundException("Profile does not exist")
 
 
-@swagger_auto_schema(
-    method="PATCH",
-    operation_description="Update user profile",
-    request_body=UpdateProfileSerializer,
-    responses={
-        200: ProfileSerializer,
-        400: "Bad request",
-        403: "Forbidden",
-        404: "Not found",
-    },
-)
-@swagger_auto_schema(
-    method="PUT",
-    operation_description="Update user profile (full update)",
-    request_body=UpdateProfileSerializer,
-    responses={
-        200: ProfileSerializer,
-        400: "Bad request",
-        403: "Forbidden",
-        404: "Not found",
-    },
-)
 @api_view(["PATCH", "PUT"])
 @permission_classes([IsAuthenticated])
 def update_profile(request, id):
@@ -150,39 +119,6 @@ def update_profile(request, id):
 
 
 # Role Management Views
-@swagger_auto_schema(
-    method="POST",
-    operation_description="Update user role (admin only)",
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["role"],
-        properties={
-            "role": openapi.Schema(
-                type=openapi.TYPE_STRING,
-                enum=["client", "provider", "admin", "superuser"],
-                description="New role",
-            )
-        },
-    ),
-    responses={
-        200: openapi.Response(
-            description="Role updated successfully",
-            schema=openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    "message": openapi.Schema(type=openapi.TYPE_STRING),
-                    "user_id": openapi.Schema(type=openapi.TYPE_STRING),
-                    "username": openapi.Schema(type=openapi.TYPE_STRING),
-                    "old_role": openapi.Schema(type=openapi.TYPE_STRING),
-                    "new_role": openapi.Schema(type=openapi.TYPE_STRING),
-                },
-            ),
-        ),
-        400: "Bad request",
-        403: "Forbidden",
-        404: "Not found",
-    },
-)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def update_user_role(request, user_id):
@@ -258,23 +194,8 @@ def update_user_role(request, user_id):
 
 
 # Unified Profile View
-@swagger_auto_schema(
-    method="GET",
-    operation_description="Get unified profile data",
-    responses={200: UnifiedProfileSerializer},
-)
-@swagger_auto_schema(
-    method="PUT",
-    operation_description="Update unified profile (full update)",
-    request_body=UpdateProfileSerializer,
-    responses={200: UnifiedProfileSerializer, 400: "Bad request"},
-)
-@swagger_auto_schema(
-    method="PATCH",
-    operation_description="Update unified profile (partial update)",
-    request_body=UpdateProfileSerializer,
-    responses={200: UnifiedProfileSerializer, 400: "Bad request"},
-)
+
+
 @api_view(["GET", "PUT", "PATCH"])
 @permission_classes([IsAuthenticated])
 def unified_profile_view(request):
@@ -313,41 +234,6 @@ def unified_profile_view(request):
 
 
 # Provider Application Views
-@swagger_auto_schema(
-    method="POST",
-    operation_description="Apply for provider account",
-    request_body=ProviderApplicationSerializer,
-    responses={
-        201: openapi.Response(
-            description="Provider application submitted successfully",
-            schema=openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    "message": openapi.Schema(type=openapi.TYPE_STRING),
-                    "application_id": openapi.Schema(type=openapi.TYPE_STRING),
-                    "estimated_review_time": openapi.Schema(type=openapi.TYPE_STRING),
-                    "next_steps": openapi.Schema(
-                        type=openapi.TYPE_ARRAY,
-                        items=openapi.Schema(type=openapi.TYPE_STRING),
-                    ),
-                    "application_details": openapi.Schema(
-                        type=openapi.TYPE_OBJECT,
-                        properties={
-                            "business_name": openapi.Schema(type=openapi.TYPE_STRING),
-                            "application_date": openapi.Schema(
-                                type=openapi.TYPE_STRING
-                            ),
-                            "current_status": openapi.Schema(type=openapi.TYPE_STRING),
-                            "contact_email": openapi.Schema(type=openapi.TYPE_STRING),
-                        },
-                    ),
-                },
-            ),
-        ),
-        400: "Bad request",
-        409: "Conflict",
-    },
-)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def apply_for_provider(request):
@@ -465,11 +351,6 @@ def apply_for_provider(request):
         )
 
 
-@swagger_auto_schema(
-    method="GET",
-    operation_description="Check provider application status",
-    responses={200: ProviderApplicationStatusSerializer, 404: "Not found"},
-)
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def check_provider_application_status(request):
@@ -521,24 +402,6 @@ def check_provider_application_status(request):
     return Response(response_data, status=status.HTTP_200_OK)
 
 
-@swagger_auto_schema(
-    method="POST",
-    operation_description="Withdraw provider application",
-    responses={
-        200: openapi.Response(
-            description="Application withdrawn successfully",
-            schema=openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    "message": openapi.Schema(type=openapi.TYPE_STRING),
-                    "previous_status": openapi.Schema(type=openapi.TYPE_STRING),
-                    "current_role": openapi.Schema(type=openapi.TYPE_STRING),
-                },
-            ),
-        ),
-        400: "Bad request",
-    },
-)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def withdraw_provider_application(request):
@@ -584,25 +447,8 @@ def withdraw_provider_application(request):
 
 
 # Admin Views
-@swagger_auto_schema(
-    method="POST",
-    operation_description="Verify a provider (admin only)",
-    responses={
-        200: openapi.Response(
-            description="Provider verified successfully",
-            schema=openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    "message": openapi.Schema(type=openapi.TYPE_STRING),
-                    "profile": ProfileSerializer,
-                },
-            ),
-        ),
-        400: "Bad request",
-        403: "Forbidden",
-        404: "Not found",
-    },
-)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def verify_provider(request, id):
@@ -636,11 +482,8 @@ def verify_provider(request, id):
 
 
 # Utility Views
-@swagger_auto_schema(
-    method="GET",
-    operation_description="Get current user data",
-    responses={200: UserSerializer},
-)
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_current_user_data(request):

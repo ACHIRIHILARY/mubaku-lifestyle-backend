@@ -1,3 +1,4 @@
+# apps/appointments/models.py
 import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +26,19 @@ class ProviderAvailability(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"{self.provider.user.get_fullname()} - {self.get_day_of_week_display()}"
+        return f"{self.provider.user.get_fullname} - {self.get_day_of_week_display()}"
+
+    def get_day_of_week_display(self):
+        days = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ]
+        return days[self.day_of_week]
 
 
 class ProviderAvailabilityException(TimeStampedUUIDModel):
@@ -55,38 +68,7 @@ class ProviderAvailabilityException(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"{self.provider.user.get_fullname()} - {self.exception_date} ({self.get_exception_type_display()})"
-
-
-class AppointmentSlot(TimeStampedUUIDModel):
-    SLOT_STATUS = (
-        ("available", _("Available")),
-        ("booked", _("Booked")),
-        ("blocked", _("Blocked")),
-    )
-
-    provider = models.ForeignKey(
-        "users.Profile", on_delete=models.CASCADE, related_name="slots"
-    )
-    slot_start = models.DateTimeField()
-    slot_end = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=SLOT_STATUS, default="available")
-    appointment = models.ForeignKey(
-        "Appointment", on_delete=models.SET_NULL, null=True, blank=True
-    )
-
-    class Meta:
-        verbose_name = _("Appointment Slot")
-        verbose_name_plural = _("Appointment Slots")
-        unique_together = ["provider", "slot_start"]
-        indexes = [
-            models.Index(fields=["provider"]),
-            models.Index(fields=["slot_start", "slot_end"]),
-            models.Index(fields=["status"]),
-        ]
-
-    def __str__(self):
-        return f"{self.provider.user.get_fullname()} - {self.slot_start}"
+        return f"{self.provider.user.get_fullname} - {self.exception_date} ({self.get_exception_type_display()})"
 
 
 class Appointment(TimeStampedUUIDModel):
@@ -144,4 +126,43 @@ class Appointment(TimeStampedUUIDModel):
         ]
 
     def __str__(self):
-        return f"{self.client.user.get_fullname()} - {self.provider.user.get_fullname()} - {self.scheduled_for}"
+        return f"{self.client.user.get_fullname} - {self.provider.user.get_fullname} - {self.scheduled_for}"
+
+    def is_available(self):
+        """Check if this time slot is still available"""
+        from .controllers import AppointmentController
+
+        return AppointmentController.is_slot_available(
+            self.provider, self.scheduled_for, self.scheduled_until, self.id
+        )
+
+
+class AppointmentSlot(TimeStampedUUIDModel):
+    SLOT_STATUS = (
+        ("available", _("Available")),
+        ("booked", _("Booked")),
+        ("blocked", _("Blocked")),
+    )
+
+    provider = models.ForeignKey(
+        "users.Profile", on_delete=models.CASCADE, related_name="slots"
+    )
+    slot_start = models.DateTimeField()
+    slot_end = models.DateTimeField()
+    status = models.CharField(max_length=20, choices=SLOT_STATUS, default="available")
+    appointment = models.ForeignKey(
+        "Appointment", on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = _("Appointment Slot")
+        verbose_name_plural = _("Appointment Slots")
+        unique_together = ["provider", "slot_start"]
+        indexes = [
+            models.Index(fields=["provider"]),
+            models.Index(fields=["slot_start", "slot_end"]),
+            models.Index(fields=["status"]),
+        ]
+
+    def __str__(self):
+        return f"{self.provider.user.get_fullname} - {self.slot_start}"
