@@ -3,13 +3,17 @@ services:
     name: mubaku-backend
     env: python
     
-    # 🌟 CRITICAL FIX: Install dependencies before running collectstatic
+    # Keep this command which includes the pip install fix
     buildCommand: "pip install -r requirements.txt && python app/manage.py collectstatic --noinput"
     
-    # This remains correct from the last fix
+    # Keep this command
     startCommand: "gunicorn app.mubaku.wsgi:application"
     
     envVars:
+      # 🌟 CRITICAL FIX: Add PYTHONPATH variable
+      - key: PYTHONPATH
+        value: .:/usr/local/lib/python3.10/site-packages
+      # 🌟 OPTIONAL FIX: Include 'app' in your settings module if the previous attempt failed
       - key: DJANGO_SETTINGS_MODULE
         value: app.mubaku.settings.prod
       - key: DATABASE_URL
