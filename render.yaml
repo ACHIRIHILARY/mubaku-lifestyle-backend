@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mubaku-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mubaku.wsgi:application --chdir app"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mubaku.settings.prod
+      - key: PYTHON_VERSION
+        value: 3.10
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DEBUG
+        value: False
