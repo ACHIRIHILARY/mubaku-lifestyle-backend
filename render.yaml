@@ -2,15 +2,17 @@ services:
   - type: web
     name: mubaku-backend
     env: python
-    # Build command must now point to 'app/manage.py'
-    buildCommand: "python app/manage.py collectstatic --noinput"
-    # Start command must now point to 'app.mubaku.wsgi:application'
+    
+    # 🌟 CRITICAL FIX: Install dependencies before running collectstatic
+    buildCommand: "pip install -r requirements.txt && python app/manage.py collectstatic --noinput"
+    
+    # This remains correct from the last fix
     startCommand: "gunicorn app.mubaku.wsgi:application"
+    
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        # This looks correct based on your folder structure: mubaku/settings/prod.py
         value: mubaku.settings.prod
-      - key: DATABASE_URl
+      - key: DATABASE_URL
         fromDatabase:
           name: mubaku-postgres
           property: connectionString
