@@ -1,0 +1,246 @@
+Of course. Based on the documentation files, here is a comprehensive overview of the API endpoints, organized for use in a React Native application.
+
+API Endpoint Documentation
+This documentation is divided into three main sections:
+
+Authentication & User Management
+User Profiles
+Appointments & Availability
+1. Authentication & User Management
+These endpoints are handled by Djoser and Simple-JWT.
+
+Base URL: /api/v1/auth/
+
+1.1. Obtain JWT Token
+Endpoint: POST /api/v1/auth/jwt/create/
+Description: Authenticates a user and returns JWT access and refresh tokens.
+Permissions: Public
+Request Body:
+{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+Success Response (200 OK):
+{
+  "refresh": "eyJ0eXAiOiJKV1QiLCJh...",
+  "access": "eyJ0eXAiOiJKV1QiLCJh..."
+}
+You should save the access and refresh tokens securely in your React Native app. The access token should be sent in the Authorization header for protected requests: Authorization: Bearer <access_token>.
+1.2. Refresh JWT Token
+Endpoint: POST /api/v1/auth/jwt/refresh/
+Description: Obtains a new access token by providing a valid refresh token.
+Permissions: Public
+Request Body:
+{
+  "refresh": "your_refresh_token"
+}
+Success Response (200 OK):
+{
+  "access": "new_access_token"
+}
+1.3. Verify JWT Token
+Endpoint: POST /api/v1/auth/jwt/verify/
+Description: Checks if a token is valid.
+Permissions: Public
+Request Body:
+{
+  "token": "your_access_or_refresh_token"
+}
+Success Response (200 OK):
+{}
+1.4. Register a New User
+Endpoint: POST /api/v1/auth/users/
+Description: Creates a new user account.
+Permissions: Public
+Request Body:
+{
+  "username": "new_user",
+  "email": "new@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "password": "a_strong_password"
+}
+Success Response (201 Created):
+{
+  "pkid": 123,
+  "username": "new_user",
+  "email": "new@example.com",
+  "first_name": "John",
+  "last_name": "Doe"
+}
+1.5. Get Current User Details
+Endpoint: GET /api/v1/auth/users/me/
+Description: Retrieves the details of the currently authenticated user.
+Permissions: Authenticated User
+Request Body: None
+Success Response (200 OK):
+{
+  "pkid": 1,
+  "username": "jane_doe",
+  "email": "jane@example.com",
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "full_name": "Jane Doe",
+  "gender": "Female",
+  "phone_number": "+237670181440",
+  "profile_photo": "/media/profiles/default_profile.png",
+  "country": "Cameroon",
+  "city": "Bamenda",
+  "role": "client",
+  "admin": false
+}
+1.6. Password Management
+Change Password: POST /api/v1/auth/users/set_password/
+Permissions: Authenticated User
+Request: {"current_password": "old", "new_password": "new"}
+Request Password Reset: POST /api/v1/auth/users/reset_password/
+Permissions: Public
+Request: {"email": "user@example.com"}
+Confirm Password Reset: POST /api/v1/auth/users/reset_password_confirm/
+Permissions: Public
+Request: {"uid": "...", "token": "...", "new_password": "..."}
+2. User Profiles
+These endpoints are for managing user profile data that is publicly visible or editable.
+
+Base URL: /api/v1/
+
+2.1. Get User Profile
+Endpoint: GET /api/v1/profiles/<pkid>/
+Description: Retrieves the public profile of a specific user.
+Permissions: Public
+Request Body: None
+Success Response (200 OK):
+{
+  "id": "uuid-of-profile",
+  "username": "jane_doe",
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane@example.com",
+  "full_name": "Jane Doe",
+  "country": "Cameroon",
+  "address": "Address",
+  "about_me": "Hello, I am Jane.",
+  "city": "Bamenda",
+  "gender": "Female",
+  "phone_number": "+237670181440",
+  "profile_photo": "/media/profiles/default_profile.png",
+  "joined_date": "Sep 15, 2025",
+  "last_login": "Sep 15, 2025 12:05 PM",
+  "membership_duration": "2 days",
+  "role": "client",
+  "is_verified_agent": false,
+  "is_verified_landlord": false,
+  "my_agency_is_verified": false
+}
+2.2. Update User Profile
+Endpoint: PATCH /api/v1/profiles/<pkid>/
+Description: Updates the profile of the specified user. Users can only update their own profiles.
+Permissions: Authenticated User (Owner of the profile)
+Request Body:
+{
+  "phone_number": "+237699000111",
+  "profile_photo": "binary_or_base64_image",
+  "about_me": "Software engineer from Bamenda.",
+  "gender": "Male",
+  "country": "Cameroon",
+  "city": "Yaoundé"
+}
+Success Response (200 OK):
+{
+  "phone_number": "+237699000111",
+  "profile_photo": "/media/profiles/jane_new.png",
+  "about_me": "Software engineer from Bamenda.",
+  "gender": "Male",
+  "country": "Cameroon",
+  "city": "Yaoundé"
+}
+3. Appointments & Availability
+These endpoints manage provider schedules, client bookings, and calendar views.
+
+Base URL: /api/appointments/ (Note: This seems to be the intended base URL from the docs, but the initial routes.md implies it might be prefixed with /api/v1/. You may need to confirm this.)
+
+3.1. Provider Availability
+Get/Set Availability: GET/POST /availability/
+
+Permissions: Provider only
+GET Response: An array of availability objects.
+[
+  {
+    "id": "uuid",
+    "provider": "uuid",
+    "day_of_week": 1,
+    "day_of_week_display": "Monday",
+    "start_time": "09:00:00",
+    "end_time": "17:00:00",
+    "is_available": true
+  }
+]
+POST Request: {"day_of_week": 1, "start_time": "09:00:00", "end_time": "17:00:00"}
+Manage Availability Exceptions: GET/POST /availability/exceptions/
+
+Permissions: Provider only
+POST Request (Unavailable): {"exception_date": "2024-12-25", "exception_type": "unavailable", "reason": "Holiday"}
+POST Request (Modified Hours): {"exception_date": "2024-12-24", "exception_type": "modified_hours", "start_time": "10:00:00", "end_time": "14:00:00", "reason": "Short Day"}
+3.2. Client Booking Flow
+Get Available Slots: GET /services/{service_id}/slots/
+
+Permissions: Public
+Query Params: start_date=YYYY-MM-DD (required), end_date=YYYY-MM-DD (required)
+Response: An array of available time slots.
+[
+  {
+    "start_time": "2024-01-15T09:00:00",
+    "end_time": "2024-01-15T09:30:00",
+    "date": "2024-01-15",
+    "duration_minutes": 30
+  }
+]
+Create Appointment: POST /appointments/
+
+Permissions: Client only
+Request:
+{
+  "service_id": "uuid",
+  "scheduled_for": "2024-01-15T09:00:00",
+  "scheduled_until": "2024-01-15T09:30:00",
+  "amount": 15000.00,
+  "currency": "XAF"
+}
+Response: The full appointment object with status: "pending".
+Confirm Payment: POST /appointments/{appointment_id}/confirm-payment/
+
+Permissions: Client (owner)
+Request: None required
+Response: The full appointment object with status: "confirmed" and payment_status: "held_in_escrow".
+3.3. Appointment Management
+Get My Appointments: GET /appointments/my/
+
+Permissions: Authenticated User
+Query Params: status (optional: "pending", "confirmed", etc.)
+Response: An array of appointment objects.
+Get Appointment Detail: GET /appointments/{appointment_id}/
+
+Permissions: Client, Provider, or Admin related to the appointment.
+Response: A single full appointment object.
+Cancel Appointment: POST /appointments/{appointment_id}/cancel/
+
+Permissions: Client, Provider, or Admin
+Request: {"reason": "Client emergency"}
+Reschedule Appointment: POST /appointments/{appointment_id}/reschedule/
+
+Permissions: Client (owner)
+Request: {"scheduled_for": "2024-01-16T10:00:00", "scheduled_until": "2024-01-16T10:30:00"}
+3.4. Calendar Views
+Monthly Calendar: GET /providers/{provider_id}/calendar/{year}/{month}/
+
+Permissions: Public
+Response: An array of daily availability statuses.
+[
+  {"date": "2024-01-01", "status": "full", "availability_level": "full"},
+  {"date": "2024-01-02", "status": "limited", "availability_level": "limited"}
+]
+Daily Details: GET /providers/{provider_id}/calendar/{year}/{month}/{day}/
+
+Permissions: Public
+Response: Detailed breakdown of a single day's schedule, including booked appointments.
+This summary should provide a solid foundation for integrating the backend with your React Native application. Let me know if you need clarification on any specific endpoint.

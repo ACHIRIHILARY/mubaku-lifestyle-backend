@@ -7,7 +7,7 @@ endif
 
 
 build:
-	docker compose up --build -d --remove-orphans
+	cmd /c "set DOCKER_BUILDKIT=false&& docker compose up --build -d --remove-orphans"
 
 up:	
 	docker compose up -d

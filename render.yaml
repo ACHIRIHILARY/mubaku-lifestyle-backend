@@ -4,7 +4,7 @@ services:
     env: python
     
     # 1. Dependency Install + Collectstatic (Fixed previous ImportError)
-    buildCommand: "pip install -r requirements.txt && python app/manage.py shell --settings=app.mubaku.settings.prod"
+    buildCommand: "bash build.sh"
     
     startCommand: "gunicorn app.mubaku.wsgi:application"
     
