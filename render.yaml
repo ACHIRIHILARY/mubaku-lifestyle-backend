@@ -3,19 +3,23 @@ services:
     name: mubaku-backend
     env: python
     
-    # Keep this command which includes the pip install fix
+    # 1. Dependency Install + Collectstatic (Fixed previous ImportError)
     buildCommand: "pip install -r requirements.txt && python app/manage.py collectstatic --noinput"
     
-    # Keep this command
     startCommand: "gunicorn app.mubaku.wsgi:application"
     
     envVars:
-      # 🌟 CRITICAL FIX: Add PYTHONPATH variable
+      # 🌟 CRITICAL FIX: Add the current directory (where manage.py is run from) to the Python search path.
       - key: PYTHONPATH
-        value: .:/usr/local/lib/python3.10/site-packages
-      # 🌟 OPTIONAL FIX: Include 'app' in your settings module if the previous attempt failed
+        value: .
+        # Note: You don't need to add the full '/usr/local/lib/...' path. 
+        # Setting it to '.' is usually sufficient for Render/deployment environments.
+        
+      # 2. Corrected Settings Module Path
       - key: DJANGO_SETTINGS_MODULE
         value: app.mubaku.settings.prod
+        
+      # 3. Secure Production Variables (as discussed, these are secure on Render)
       - key: DATABASE_URL
         fromDatabase:
           name: mubaku-postgres
