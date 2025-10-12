@@ -2,16 +2,20 @@ services:
   - type: web
     name: mubaku-backend
     env: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn mubaku.wsgi:application --chdir app"
+    buildCommand: "./manage.py collectstatic --noinput"
+    startCommand: "gunicorn mubaku.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: mubaku.settings.prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mubaku-postgres
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
       - key: PYTHON_VERSION
         value: 3.10.14
-      - key: SECRET_KEY
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: DEBUG
-        value: False
+
+databases:
+  - name: mubaku-postgres
+    plan: free
