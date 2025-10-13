@@ -145,15 +145,20 @@ CORS_ALLOW_METHODS = [
 
 
 # Cache Settings
+CACHE_BACKEND = env("CACHE_BACKEND", default="django.core.cache.backends.locmem.LocMemCache")
+CACHE_LOCATION = env("CACHE_LOCATION", default="unique-snowflake")
+
 CACHES = {
     "default": {
-        "BACKEND": env("CACHE_BACKEND"),
-        "LOCATION": env("CACHE_LOCATION"),
-        "OPTIONS": {
-            "CLIENT_CLASS": env("OPTIONS_CLIENT_CLASS"),
-        },
+        "BACKEND": CACHE_BACKEND,
+        "LOCATION": CACHE_LOCATION,
     }
 }
+
+if CACHE_BACKEND == "django_redis.cache.RedisCache":
+    CACHES["default"]["OPTIONS"] = {
+        "CLIENT_CLASS": env("OPTIONS_CLIENT_CLASS", default="django_redis.client.DefaultClient"),
+    }
 
 # CSRF Settings
 CSRF_TRUSTED_ORIGINS = [
