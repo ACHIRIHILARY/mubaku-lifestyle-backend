@@ -6,18 +6,18 @@ services:
     # 1. Dependency Install + Collectstatic (Fixed previous ImportError)
     buildCommand: "bash build.sh"
     
-    startCommand: "gunicorn app.mubaku.wsgi:application"
+    startCommand: "gunicorn mubaku.wsgi:application"
     
     envVars:
       # 🌟 CRITICAL FIX: Add the current directory (where manage.py is run from) to the Python search path.
       - key: PYTHONPATH
-        value: .
+        value: app
         # Note: You don't need to add the full '/usr/local/lib/...' path. 
         # Setting it to '.' is usually sufficient for Render/deployment environments.
         
       # 2. Corrected Settings Module Path
       - key: DJANGO_SETTINGS_MODULE
-        value: app.mubaku.settings.prod
+        value: mubaku.settings.prod
         
       # 3. Secure Production Variables (as discussed, these are secure on Render)
       - key: DATABASE_URL
