@@ -151,3 +151,4 @@ websockets==15.0.1
 yarl==1.9.4
 zope.interface==7.2
 dj-database-url==0.5.0
+whitenoise==6.6.0
