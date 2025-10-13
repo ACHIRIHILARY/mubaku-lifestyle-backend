@@ -5,5 +5,6 @@ set -o errexit
 pip install --upgrade pip
 pip install -r requirements.txt
 
-python app/manage.py collectstatic --noinput --settings=mubaku.settings.prod
-python app/manage.py migrate --settings=mubaku.settings.prod
+cd app
+python manage.py collectstatic --noinput --settings=mubaku.settings.prod
+python manage.py migrate --settings=mubaku.settings.prod

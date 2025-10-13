@@ -6,7 +6,7 @@ from .base import *
 DEBUG = False
 
 # This tells Django where your main URL routing file is located
-ROOT_URLCONF = 'app.mubaku.urls'
+ROOT_URLCONF = 'mubaku.urls'
 
 # Define ALLOWED_HOSTS for security (CRITICAL for DEBUG=False)
 ALLOWED_HOSTS = [
