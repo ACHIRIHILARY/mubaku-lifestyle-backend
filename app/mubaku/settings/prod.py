@@ -16,6 +16,7 @@ ALLOWED_HOSTS = [
 
 # Define STATIC_ROOT (CRITICAL for collectstatic to work at runtime)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = '/var/data/media'
 
 # Database Configuration
 DATABASES = {

@@ -28,6 +28,10 @@ services:
         generateValue: true
       - key: PYTHON_VERSION
         value: 3.10.14
+    disks:
+      - name: media
+        mountPath: /var/data/media
+        sizeGB: 1
 
 databases:
   - name: mubaku-postgres
