@@ -344,7 +344,6 @@ logging.config.dictConfig(
             "console": {
                 "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
             },
-            "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
             "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
         },
         "handlers": {
@@ -352,34 +351,28 @@ logging.config.dictConfig(
                 "class": "logging.StreamHandler",
                 "formatter": "console",
             },
-            "file": {
-                "level": LoggingConstants.LOG_LEVEL,
-                "class": "logging.FileHandler",
-                "formatter": "file",
-                "filename": f"logs/{LoggingConstants.LOG_FILE_NAME}",
-            },
             "django.server": DEFAULT_LOGGING["handlers"]["django.server"],
         },
         "loggers": {
             "": {
                 "level": LoggingConstants.LOG_LEVEL,
-                "handlers": ["console", "file"],
+                "handlers": ["console"],
                 "propagate": False,
             },
             "apps": {
                 "level": LoggingConstants.LOG_LEVEL,
-                "handlers": ["console", "file"],
+                "handlers": ["console"],
                 "propagate": False,
             },
             "django.server": DEFAULT_LOGGING["loggers"]["django.server"],
             "channels": {
                 "level": "DEBUG",  # Set to DEBUG for detailed Channels logging
-                "handlers": ["console", "file"],
+                "handlers": ["console"],
                 "propagate": False,
             },
             "channels.layers": {
                 "level": "DEBUG",  # Specific logger for Channels layers
-                "handlers": ["console", "file"],
+                "handlers": ["console"],
                 "propagate": False,
             },
         },
